@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ✏️ 회사명 수정: 아래 title과 본문의 "한빛솔루션"을 원하는 이름으로 바꾸세요 -->
+<title>한빛솔루션 | 기업 소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ✏️ 대표 색상 수정: --primary 값만 바꾸면 전체 포인트 색이 바뀝니다 */
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f5f7fb;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans KR', sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; word-break: keep-all; }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 90px 0; scroll-margin-top: 64px; }
+  .section-title { text-align: center; margin-bottom: 50px; }
+  .section-title span { color: var(--primary); font-weight: 700; font-size: 14px; letter-spacing: 2px; }
+  .section-title h2 { font-size: 32px; margin-top: 8px; }
+  .alt { background: var(--bg-alt); }
+
+  /* 헤더 */
+  header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: rgba(255,255,255,.95); border-bottom: 1px solid var(--border); z-index: 100; }
+  header .container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+  .logo { font-size: 22px; font-weight: 700; color: var(--primary); }
+  nav ul { display: flex; gap: 28px; list-style: none; }
+  nav a { font-weight: 500; font-size: 15px; }
+  nav a:hover { color: var(--primary); }
+  .menu-btn { display: none; background: none; border: 0; font-size: 26px; cursor: pointer; color: var(--text); }
+
+  /* 히어로 */
+  .hero { padding: 170px 0 120px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; text-align: center; }
+  .hero h1 { font-size: 44px; line-height: 1.35; margin-bottom: 20px; }
+  .hero p { font-size: 18px; opacity: .9; margin-bottom: 36px; }
+  .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-weight: 700; transition: .2s; }
+  .btn-white { background: #fff; color: var(--primary); }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+  .btn-primary { background: var(--primary); color: #fff; border: 0; cursor: pointer; font-size: 16px; font-family: inherit; }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  /* 회사 소개 */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  .about-text h3 { font-size: 26px; margin-bottom: 16px; }
+  .about-text p { color: var(--muted); margin-bottom: 14px; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .stat { background: var(--bg-alt); border-radius: 12px; padding: 28px; text-align: center; }
+  .stat strong { display: block; font-size: 34px; color: var(--primary); }
+  .stat span { color: var(--muted); font-size: 14px; }
+
+  /* 서비스 */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 34px 28px; transition: .2s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
+  .card .icon { width: 52px; height: 52px; border-radius: 12px; background: #e8efff; display: grid; place-items: center; font-size: 24px; margin-bottom: 20px; }
+  .card h3 { font-size: 20px; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  /* 연혁 */
+  .timeline { max-width: 680px; margin: 0 auto; border-left: 2px solid var(--border); padding-left: 30px; }
+  .timeline li { list-style: none; position: relative; margin-bottom: 34px; }
+  .timeline li::before { content: ''; position: absolute; left: -38px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); }
+  .timeline .year { font-weight: 700; color: var(--primary); }
+
+  /* 팀 */
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+  .avatar { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, #c7d7fe, #93b4fd); display: grid; place-items: center; font-size: 36px; font-weight: 700; color: #fff; }
+  .member h4 { font-size: 18px; }
+  .member span { color: var(--muted); font-size: 14px; }
+
+  /* 연락처 */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
+  .contact-info li { list-style: none; margin-bottom: 22px; }
+  .contact-info strong { display: block; font-size: 14px; color: var(--muted); font-weight: 500; }
+  .contact-info p { font-size: 17px; font-weight: 500; }
+  form { display: grid; gap: 14px; }
+  input, textarea { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; }
+  input:focus, textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
+  textarea { min-height: 140px; resize: vertical; }
+
+  footer { background: #111827; color: #9ca3af; padding: 40px 0; font-size: 14px; }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer .logo { color: #fff; font-size: 18px; }
+
+  /* 반응형 */
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+    .team { grid-template-columns: 1fr 1fr; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 64px 0; }
+    .menu-btn { display: block; }
+    nav ul { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: #fff; border-bottom: 1px solid var(--border); }
+    nav ul.open { display: flex; }
+    nav li a { display: block; padding: 14px 20px; }
+    .hero { padding: 130px 0 80px; }
+    .hero h1 { font-size: 30px; }
+    .hero p { font-size: 16px; }
+    .section-title h2 { font-size: 26px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="#home" class="logo">한빛솔루션</a>
+    <nav>
+      <button class="menu-btn" aria-label="메뉴 열기" onclick="document.getElementById('menu').classList.toggle('open')">☰</button>
+      <ul id="menu" onclick="this.classList.remove('open')">
+        <li><a href="#about">회사 소개</a></li>
+        <li><a href="#services">서비스</a></li>
+        <li><a href="#history">연혁</a></li>
+        <li><a href="#team">팀</a></li>
+        <li><a href="#contact">문의하기</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- 히어로 -->
+<section class="hero" id="home">
+  <div class="container">
+    <h1>기술로 더 나은 내일을 만드는<br>신뢰의 파트너</h1>
+    <p>한빛솔루션은 기업의 디지털 전환을 함께 고민하고 실행합니다.</p>
+    <a href="#contact" class="btn btn-white">상담 문의하기</a>
+  </div>
+</section>
+
+<!-- 회사 소개 -->
+<section id="about">
+  <div class="container">
+    <div class="section-title"><span>ABOUT US</span><h2>회사 소개</h2></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>고객의 성장이 곧 우리의 성장입니다</h3>
+        <p>2015년 설립된 한빛솔루션은 IT 컨설팅과 소프트웨어 개발을 전문으로 하는 기업입니다.</p>
+        <p>작은 문제도 깊이 고민하고, 고객의 입장에서 가장 실용적인 해답을 찾는 것을 원칙으로 삼고 있습니다.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>10+</strong><span>업력(년)</span></div>
+        <div class="stat"><strong>320</strong><span>완료 프로젝트</span></div>
+        <div class="stat"><strong>150+</strong><span>파트너 기업</span></div>
+        <div class="stat"><strong>98%</strong><span>고객 만족도</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 서비스 -->
+<section id="services" class="alt">
+  <div class="container">
+    <div class="section-title"><span>SERVICES</span><h2>주요 서비스</h2></div>
+    <div class="cards">
+      <div class="card"><div class="icon">💡</div><h3>IT 컨설팅</h3><p>비즈니스 목표에 맞는 IT 전략과 로드맵을 함께 설계합니다.</p></div>
+      <div class="card"><div class="icon">💻</div><h3>소프트웨어 개발</h3><p>웹·모바일 서비스를 기획부터 개발, 운영까지 책임집니다.</p></div>
+      <div class="card"><div class="icon">☁️</div><h3>클라우드 구축</h3><p>안정적이고 확장 가능한 클라우드 인프라를 구성합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 연혁 -->
+<section id="history">
+  <div class="container">
+    <div class="section-title"><span>HISTORY</span><h2>회사 연혁</h2></div>
+    <ul class="timeline">
+      <li><div class="year">2015</div><p>한빛솔루션 설립</p></li>
+      <li><div class="year">2018</div><p>기업부설연구소 설립, 벤처기업 인증</p></li>
+      <li><div class="year">2021</div><p>클라우드 사업부 신설, 누적 프로젝트 200건 달성</p></li>
+      <li><div class="year">2025</div><p>본사 이전 및 임직원 80명으로 확대</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 팀 -->
+<section id="team" class="alt">
+  <div class="container">
+    <div class="section-title"><span>TEAM</span><h2>함께하는 사람들</h2></div>
+    <div class="team">
+      <div class="member"><div class="avatar">김</div><h4>김대표</h4><span>대표이사</span></div>
+      <div class="member"><div class="avatar">이</div><h4>이기술</h4><span>최고기술책임자</span></div>
+      <div class="member"><div class="avatar">박</div><h4>박기획</h4><span>사업기획 이사</span></div>
+      <div class="member"><div class="avatar">최</div><h4>최디자인</h4><span>디자인 팀장</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 연락처 -->
+<section id="contact">
+  <div class="container">
+    <div class="section-title"><span>CONTACT</span><h2>문의하기</h2></div>
+    <div class="contact-grid">
+      <ul class="contact-info">
+        <li><strong>주소</strong><p>서울특별시 강남구 테헤란로 123, 10층</p></li>
+        <li><strong>전화</strong><p>02-1234-5678</p></li>
+        <li><strong>이메일</strong><p>contact@hanbit-example.com</p></li>
+        <li><strong>운영 시간</strong><p>평일 09:00 – 18:00</p></li>
+      </ul>
+      <!-- 실제 전송 기능은 없습니다. 이메일 서비스(Formspree 등)와 연결해야 동작합니다 -->
+      <form onsubmit="event.preventDefault(); alert('문의가 접수되었습니다. (데모)'); this.reset();">
+        <input type="text" placeholder="이름" required>
+        <input type="email" placeholder="이메일" required>
+        <textarea placeholder="문의 내용" required></textarea>
+        <button type="submit" class="btn btn-primary">보내기</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div><div class="logo">한빛솔루션</div><p>대표 김대표 · 사업자등록번호 000-00-00000</p></div>
+    <p>© 2026 한빛솔루션. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
