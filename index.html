@@ -87,6 +87,24 @@
   input:focus, textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
   textarea { min-height: 140px; resize: vertical; }
 
+  /* 회원 기능 */
+  .auth-area { display: flex; align-items: center; gap: 10px; margin-left: 24px; }
+  .auth-area .user-email { font-size: 14px; color: var(--muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-sm { padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; border: 1px solid var(--primary); }
+  .btn-sm.solid { background: var(--primary); color: #fff; }
+  .btn-sm.line { background: #fff; color: var(--primary); }
+  .nav-wrap { display: flex; align-items: center; }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(17,24,39,.55); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+  .modal-bg.show { display: flex; }
+  .modal { background: #fff; border-radius: 14px; padding: 32px 28px; width: 100%; max-width: 400px; position: relative; }
+  .modal h3 { font-size: 22px; margin-bottom: 20px; }
+  .modal .close { position: absolute; top: 12px; right: 14px; background: none; border: 0; font-size: 24px; cursor: pointer; color: var(--muted); }
+  .modal .switch { margin-top: 16px; text-align: center; font-size: 14px; color: var(--muted); }
+  .modal .switch a { color: var(--primary); font-weight: 700; cursor: pointer; }
+  .msg { font-size: 14px; min-height: 20px; }
+  .msg.err { color: #dc2626; }
+  .msg.ok { color: #16a34a; }
+
   footer { background: #111827; color: #9ca3af; padding: 40px 0; font-size: 14px; }
   footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   footer .logo { color: #fff; font-size: 18px; }
@@ -108,6 +126,9 @@
     .hero p { font-size: 16px; }
     .section-title h2 { font-size: 26px; }
     .cards { grid-template-columns: 1fr; }
+    .auth-area { margin-left: 0; margin-right: 6px; }
+    .auth-area .user-email { display: none; }
+    .nav-wrap { flex-direction: row-reverse; }
   }
 </style>
 </head>
@@ -116,6 +137,7 @@
 <header>
   <div class="container">
     <a href="#home" class="logo">한빛솔루션</a>
+    <div class="nav-wrap">
     <nav>
       <button class="menu-btn" aria-label="메뉴 열기" onclick="document.getElementById('menu').classList.toggle('open')">☰</button>
       <ul id="menu" onclick="this.classList.remove('open')">
@@ -126,8 +148,29 @@
         <li><a href="#contact">문의하기</a></li>
       </ul>
     </nav>
+    <!-- 로그인 상태에 따라 버튼이 바뀝니다 -->
+    <div class="auth-area" id="authArea">
+      <button class="btn-sm line" onclick="openModal('login')">로그인</button>
+      <button class="btn-sm solid" onclick="openModal('signup')">회원가입</button>
+    </div>
+    </div>
   </div>
 </header>
+
+<!-- 로그인 / 회원가입 창 -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="close" onclick="closeModal()" aria-label="닫기">×</button>
+    <h3 id="modalTitle">로그인</h3>
+    <form id="authForm">
+      <input type="email" id="authEmail" placeholder="이메일" required autocomplete="email">
+      <input type="password" id="authPw" placeholder="비밀번호 (6자 이상)" minlength="6" required>
+      <button type="submit" class="btn btn-primary" id="authSubmit">로그인</button>
+      <p class="msg" id="authMsg"></p>
+    </form>
+    <p class="switch" id="modalSwitch"></p>
+  </div>
+</div>
 
 <!-- 히어로 -->
 <section class="hero" id="home">
@@ -204,15 +247,16 @@
       <ul class="contact-info">
         <li><strong>주소</strong><p>서울특별시 강남구 테헤란로 123, 10층</p></li>
         <li><strong>전화</strong><p>02-1234-5678</p></li>
-        <li><strong>이메일</strong><p>contact@hanbit-example.com</p></li>
+        <li><strong>이메일</strong><p>tomasg@naver.com</p></li>
         <li><strong>운영 시간</strong><p>평일 09:00 – 18:00</p></li>
       </ul>
-      <!-- 실제 전송 기능은 없습니다. 이메일 서비스(Formspree 등)와 연결해야 동작합니다 -->
-      <form onsubmit="event.preventDefault(); alert('문의가 접수되었습니다. (데모)'); this.reset();">
-        <input type="text" placeholder="이름" required>
-        <input type="email" placeholder="이메일" required>
-        <textarea placeholder="문의 내용" required></textarea>
+      <!-- 문의 내용은 Supabase의 inquiries 표에 저장됩니다 -->
+      <form id="contactForm">
+        <input type="text" id="cName" placeholder="이름" required>
+        <input type="email" id="cEmail" placeholder="이메일" required>
+        <textarea id="cBody" placeholder="문의 내용" required></textarea>
         <button type="submit" class="btn btn-primary">보내기</button>
+        <p class="msg" id="contactMsg"></p>
       </form>
     </div>
   </div>
@@ -225,5 +269,91 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+  /* ✏️ Supabase 연결: 설정 안내서 3단계에서 복사한 두 값을 따옴표 안에 붙여 넣으세요 */
+  const SUPABASE_URL = '';
+  const SUPABASE_ANON_KEY = '';
+
+  const db = (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const $ = id => document.getElementById(id);
+  let mode = 'login';
+
+  const ERR = {
+    'Invalid login credentials': '이메일 또는 비밀번호가 올바르지 않습니다.',
+    'Email not confirmed': '이메일 인증이 아직 완료되지 않았습니다. 메일함을 확인해 주세요.',
+    'User already registered': '이미 가입된 이메일입니다.'
+  };
+  const korErr = e => ERR[e.message] || e.message;
+  function setMsg(el, text, ok) { el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); }
+
+  function openModal(m) {
+    mode = m;
+    const login = m === 'login';
+    $('modalTitle').textContent = login ? '로그인' : '회원가입';
+    $('authSubmit').textContent = login ? '로그인' : '가입하기';
+    $('authPw').autocomplete = login ? 'current-password' : 'new-password';
+    $('modalSwitch').innerHTML = login
+      ? '아직 회원이 아니신가요? <a onclick="openModal(\'signup\')">회원가입</a>'
+      : '이미 가입하셨나요? <a onclick="openModal(\'login\')">로그인</a>';
+    $('authMsg').textContent = '';
+    $('modalBg').classList.add('show');
+    $('authEmail').focus();
+  }
+  function closeModal() { $('modalBg').classList.remove('show'); $('authForm').reset(); }
+
+  function renderAuth(user) {
+    const area = $('authArea');
+    if (user) {
+      area.innerHTML = '<span class="user-email"></span><button class="btn-sm line" id="logoutBtn">로그아웃</button>';
+      area.querySelector('.user-email').textContent = user.email + '님';
+      $('logoutBtn').onclick = async () => { await db.auth.signOut(); };
+      if (!$('cEmail').value) $('cEmail').value = user.email;
+    } else {
+      area.innerHTML = '<button class="btn-sm line" onclick="openModal(\'login\')">로그인</button>'
+        + '<button class="btn-sm solid" onclick="openModal(\'signup\')">회원가입</button>';
+    }
+  }
+
+  $('authForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('authMsg');
+    if (!db) return setMsg(msg, '아직 데이터베이스가 연결되지 않았습니다. (설정 안내서 참고)');
+    const email = $('authEmail').value.trim(), password = $('authPw').value;
+    $('authSubmit').disabled = true;
+    try {
+      if (mode === 'signup') {
+        const { data, error } = await db.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } });
+        if (error) throw error;
+        if (data.session) { closeModal(); }
+        else setMsg(msg, '가입 확인 메일을 보냈어요. 메일의 링크를 누른 뒤 로그인해 주세요.', true);
+      } else {
+        const { error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        closeModal();
+      }
+    } catch (err) { setMsg(msg, korErr(err)); }
+    finally { $('authSubmit').disabled = false; }
+  });
+
+  $('contactForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('contactMsg');
+    if (!db) return setMsg(msg, '아직 데이터베이스가 연결되지 않았습니다. tomasg@naver.com으로 메일 주세요.');
+    const { error } = await db.from('inquiries').insert({
+      name: $('cName').value.trim(), email: $('cEmail').value.trim(), message: $('cBody').value.trim()
+    });
+    if (error) return setMsg(msg, '전송에 실패했습니다: ' + error.message);
+    e.target.reset();
+    setMsg(msg, '문의가 접수되었습니다. 빠르게 답변드릴게요!', true);
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  if (db) {
+    db.auth.onAuthStateChange((_event, session) => renderAuth(session ? session.user : null));
+  }
+</script>
 </body>
 </html>
