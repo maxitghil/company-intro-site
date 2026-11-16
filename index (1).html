@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ✏️ 회사명 수정: 아래 title과 본문의 "한빛솔루션"을 원하는 이름으로 바꾸세요 -->
+<title>한빛솔루션 | 기업 소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ✏️ 대표 색상 수정: --primary 값만 바꾸면 전체 포인트 색이 바뀝니다 */
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f5f7fb;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans KR', sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; word-break: keep-all; }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 90px 0; scroll-margin-top: 64px; }
+  .section-title { text-align: center; margin-bottom: 50px; }
+  .section-title span { color: var(--primary); font-weight: 700; font-size: 14px; letter-spacing: 2px; }
+  .section-title h2 { font-size: 32px; margin-top: 8px; }
+  .alt { background: var(--bg-alt); }
+
+  /* 헤더 */
+  header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: rgba(255,255,255,.95); border-bottom: 1px solid var(--border); z-index: 100; }
+  header .container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+  .logo { font-size: 22px; font-weight: 700; color: var(--primary); }
+  nav ul { display: flex; gap: 28px; list-style: none; }
+  nav a { font-weight: 500; font-size: 15px; }
+  nav a:hover { color: var(--primary); }
+  .menu-btn { display: none; background: none; border: 0; font-size: 26px; cursor: pointer; color: var(--text); }
+
+  /* 히어로 */
+  .hero { padding: 170px 0 120px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; text-align: center; }
+  .hero h1 { font-size: 44px; line-height: 1.35; margin-bottom: 20px; }
+  .hero p { font-size: 18px; opacity: .9; margin-bottom: 36px; }
+  .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-weight: 700; transition: .2s; }
+  .btn-white { background: #fff; color: var(--primary); }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+  .btn-primary { background: var(--primary); color: #fff; border: 0; cursor: pointer; font-size: 16px; font-family: inherit; }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  /* 회사 소개 */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  .about-text h3 { font-size: 26px; margin-bottom: 16px; }
+  .about-text p { color: var(--muted); margin-bottom: 14px; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .stat { background: var(--bg-alt); border-radius: 12px; padding: 28px; text-align: center; }
+  .stat strong { display: block; font-size: 34px; color: var(--primary); }
+  .stat span { color: var(--muted); font-size: 14px; }
+
+  /* 서비스 */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 34px 28px; transition: .2s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
+  .card .icon { width: 52px; height: 52px; border-radius: 12px; background: #e8efff; display: grid; place-items: center; font-size: 24px; margin-bottom: 20px; }
+  .card h3 { font-size: 20px; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  /* 연혁 */
+  .timeline { max-width: 680px; margin: 0 auto; border-left: 2px solid var(--border); padding-left: 30px; }
+  .timeline li { list-style: none; position: relative; margin-bottom: 34px; }
+  .timeline li::before { content: ''; position: absolute; left: -38px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); }
+  .timeline .year { font-weight: 700; color: var(--primary); }
+
+  /* 팀 */
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+  .avatar { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, #c7d7fe, #93b4fd); display: grid; place-items: center; font-size: 36px; font-weight: 700; color: #fff; }
+  .member h4 { font-size: 18px; }
+  .member span { color: var(--muted); font-size: 14px; }
+
+  /* 연락처 */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
+  .contact-info li { list-style: none; margin-bottom: 22px; }
+  .contact-info strong { display: block; font-size: 14px; color: var(--muted); font-weight: 500; }
+  .contact-info p { font-size: 17px; font-weight: 500; }
+  form { display: grid; gap: 14px; }
+  input, textarea { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; }
+  input:focus, textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
+  textarea { min-height: 140px; resize: vertical; }
+
+  /* 회원 기능 */
+  .auth-area { display: flex; align-items: center; gap: 10px; margin-left: 24px; }
+  .auth-area .user-email { font-size: 14px; color: var(--muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-sm { padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; border: 1px solid var(--primary); }
+  .btn-sm.solid { background: var(--primary); color: #fff; }
+  .btn-sm.line { background: #fff; color: var(--primary); }
+  .nav-wrap { display: flex; align-items: center; }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(17,24,39,.55); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+  .modal-bg.show { display: flex; }
+  .modal { background: #fff; border-radius: 14px; padding: 32px 28px; width: 100%; max-width: 400px; position: relative; }
+  .modal h3 { font-size: 22px; margin-bottom: 20px; }
+  .modal .close { position: absolute; top: 12px; right: 14px; background: none; border: 0; font-size: 24px; cursor: pointer; color: var(--muted); }
+  .modal .switch { margin-top: 16px; text-align: center; font-size: 14px; color: var(--muted); }
+  .modal .switch a { color: var(--primary); font-weight: 700; cursor: pointer; }
+  .msg { font-size: 14px; min-height: 20px; }
+  .msg.err { color: #dc2626; }
+  .msg.ok { color: #16a34a; }
+
+  footer { background: #111827; color: #9ca3af; padding: 40px 0; font-size: 14px; }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer .logo { color: #fff; font-size: 18px; }
+
+  /* 반응형 */
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+    .team { grid-template-columns: 1fr 1fr; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 64px 0; }
+    .menu-btn { display: block; }
+    nav ul { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: #fff; border-bottom: 1px solid var(--border); }
+    nav ul.open { display: flex; }
+    nav li a { display: block; padding: 14px 20px; }
+    .hero { padding: 130px 0 80px; }
+    .hero h1 { font-size: 30px; }
+    .hero p { font-size: 16px; }
+    .section-title h2 { font-size: 26px; }
+    .cards { grid-template-columns: 1fr; }
+    .auth-area { margin-left: 0; margin-right: 6px; }
+    .auth-area .user-email { display: none; }
+    .nav-wrap { flex-direction: row-reverse; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="#home" class="logo">한빛솔루션</a>
+    <div class="nav-wrap">
+    <nav>
+      <button class="menu-btn" aria-label="메뉴 열기" onclick="document.getElementById('menu').classList.toggle('open')">☰</button>
+      <ul id="menu" onclick="this.classList.remove('open')">
+        <li><a href="#about">회사 소개</a></li>
+        <li><a href="#services">서비스</a></li>
+        <li><a href="#history">연혁</a></li>
+        <li><a href="#team">팀</a></li>
+        <li><a href="#contact">문의하기</a></li>
+      </ul>
+    </nav>
+    <!-- 로그인 상태에 따라 버튼이 바뀝니다 -->
+    <div class="auth-area" id="authArea">
+      <button class="btn-sm line" onclick="openModal('login')">로그인</button>
+      <button class="btn-sm solid" onclick="openModal('signup')">회원가입</button>
+    </div>
+    </div>
+  </div>
+</header>
+
+<!-- 로그인 / 회원가입 창 -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="close" onclick="closeModal()" aria-label="닫기">×</button>
+    <h3 id="modalTitle">로그인</h3>
+    <form id="authForm">
+      <input type="email" id="authEmail" placeholder="이메일" required autocomplete="email">
+      <input type="password" id="authPw" placeholder="비밀번호 (6자 이상)" minlength="6" required>
+      <button type="submit" class="btn btn-primary" id="authSubmit">로그인</button>
+      <p class="msg" id="authMsg"></p>
+    </form>
+    <p class="switch" id="modalSwitch"></p>
+  </div>
+</div>
+
+<!-- 히어로 -->
+<section class="hero" id="home">
+  <div class="container">
+    <h1>기술로 더 나은 내일을 만드는<br>신뢰의 파트너</h1>
+    <p>한빛솔루션은 기업의 디지털 전환을 함께 고민하고 실행합니다.</p>
+    <a href="#contact" class="btn btn-white">상담 문의하기</a>
+  </div>
+</section>
+
+<!-- 회사 소개 -->
+<section id="about">
+  <div class="container">
+    <div class="section-title"><span>ABOUT US</span><h2>회사 소개</h2></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>고객의 성장이 곧 우리의 성장입니다</h3>
+        <p>2015년 설립된 한빛솔루션은 IT 컨설팅과 소프트웨어 개발을 전문으로 하는 기업입니다.</p>
+        <p>작은 문제도 깊이 고민하고, 고객의 입장에서 가장 실용적인 해답을 찾는 것을 원칙으로 삼고 있습니다.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>10+</strong><span>업력(년)</span></div>
+        <div class="stat"><strong>320</strong><span>완료 프로젝트</span></div>
+        <div class="stat"><strong>150+</strong><span>파트너 기업</span></div>
+        <div class="stat"><strong>98%</strong><span>고객 만족도</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 서비스 -->
+<section id="services" class="alt">
+  <div class="container">
+    <div class="section-title"><span>SERVICES</span><h2>주요 서비스</h2></div>
+    <div class="cards">
+      <div class="card"><div class="icon">💡</div><h3>IT 컨설팅</h3><p>비즈니스 목표에 맞는 IT 전략과 로드맵을 함께 설계합니다.</p></div>
+      <div class="card"><div class="icon">💻</div><h3>소프트웨어 개발</h3><p>웹·모바일 서비스를 기획부터 개발, 운영까지 책임집니다.</p></div>
+      <div class="card"><div class="icon">☁️</div><h3>클라우드 구축</h3><p>안정적이고 확장 가능한 클라우드 인프라를 구성합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 연혁 -->
+<section id="history">
+  <div class="container">
+    <div class="section-title"><span>HISTORY</span><h2>회사 연혁</h2></div>
+    <ul class="timeline">
+      <li><div class="year">2015</div><p>한빛솔루션 설립</p></li>
+      <li><div class="year">2018</div><p>기업부설연구소 설립, 벤처기업 인증</p></li>
+      <li><div class="year">2021</div><p>클라우드 사업부 신설, 누적 프로젝트 200건 달성</p></li>
+      <li><div class="year">2025</div><p>본사 이전 및 임직원 80명으로 확대</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 팀 -->
+<section id="team" class="alt">
+  <div class="container">
+    <div class="section-title"><span>TEAM</span><h2>함께하는 사람들</h2></div>
+    <div class="team">
+      <div class="member"><div class="avatar">김</div><h4>김대표</h4><span>대표이사</span></div>
+      <div class="member"><div class="avatar">이</div><h4>이기술</h4><span>최고기술책임자</span></div>
+      <div class="member"><div class="avatar">박</div><h4>박기획</h4><span>사업기획 이사</span></div>
+      <div class="member"><div class="avatar">최</div><h4>최디자인</h4><span>디자인 팀장</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 연락처 -->
+<section id="contact">
+  <div class="container">
+    <div class="section-title"><span>CONTACT</span><h2>문의하기</h2></div>
+    <div class="contact-grid">
+      <ul class="contact-info">
+        <li><strong>주소</strong><p>서울특별시 강남구 테헤란로 123, 10층</p></li>
+        <li><strong>전화</strong><p>02-1234-5678</p></li>
+        <li><strong>이메일</strong><p>tomasg@naver.com</p></li>
+        <li><strong>운영 시간</strong><p>평일 09:00 – 18:00</p></li>
+      </ul>
+      <!-- 문의 내용은 Supabase의 inquiries 표에 저장됩니다 -->
+      <form id="contactForm">
+        <input type="text" id="cName" placeholder="이름" required>
+        <input type="email" id="cEmail" placeholder="이메일" required>
+        <textarea id="cBody" placeholder="문의 내용" required></textarea>
+        <button type="submit" class="btn btn-primary">보내기</button>
+        <p class="msg" id="contactMsg"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div><div class="logo">한빛솔루션</div><p>대표 김대표 · 사업자등록번호 000-00-00000</p></div>
+    <p>© 2026 한빛솔루션. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+  /* ✏️ Supabase 연결: 설정 안내서 3단계에서 복사한 두 값을 따옴표 안에 붙여 넣으세요 */
+  const SUPABASE_URL = '';
+  const SUPABASE_ANON_KEY = '';
+
+  const db = (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const $ = id => document.getElementById(id);
+  let mode = 'login';
+
+  const ERR = {
+    'Invalid login credentials': '이메일 또는 비밀번호가 올바르지 않습니다.',
+    'Email not confirmed': '이메일 인증이 아직 완료되지 않았습니다. 메일함을 확인해 주세요.',
+    'User already registered': '이미 가입된 이메일입니다.'
+  };
+  const korErr = e => ERR[e.message] || e.message;
+  function setMsg(el, text, ok) { el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); }
+
+  function openModal(m) {
+    mode = m;
+    const login = m === 'login';
+    $('modalTitle').textContent = login ? '로그인' : '회원가입';
+    $('authSubmit').textContent = login ? '로그인' : '가입하기';
+    $('authPw').autocomplete = login ? 'current-password' : 'new-password';
+    $('modalSwitch').innerHTML = login
+      ? '아직 회원이 아니신가요? <a onclick="openModal(\'signup\')">회원가입</a>'
+      : '이미 가입하셨나요? <a onclick="openModal(\'login\')">로그인</a>';
+    $('authMsg').textContent = '';
+    $('modalBg').classList.add('show');
+    $('authEmail').focus();
+  }
+  function closeModal() { $('modalBg').classList.remove('show'); $('authForm').reset(); }
+
+  function renderAuth(user) {
+    const area = $('authArea');
+    if (user) {
+      area.innerHTML = '<span class="user-email"></span><button class="btn-sm line" id="logoutBtn">로그아웃</button>';
+      area.querySelector('.user-email').textContent = user.email + '님';
+      $('logoutBtn').onclick = async () => { await db.auth.signOut(); };
+      if (!$('cEmail').value) $('cEmail').value = user.email;
+    } else {
+      area.innerHTML = '<button class="btn-sm line" onclick="openModal(\'login\')">로그인</button>'
+        + '<button class="btn-sm solid" onclick="openModal(\'signup\')">회원가입</button>';
+    }
+  }
+
+  $('authForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('authMsg');
+    if (!db) return setMsg(msg, '아직 데이터베이스가 연결되지 않았습니다. (설정 안내서 참고)');
+    const email = $('authEmail').value.trim(), password = $('authPw').value;
+    $('authSubmit').disabled = true;
+    try {
+      if (mode === 'signup') {
+        const { data, error } = await db.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } });
+        if (error) throw error;
+        if (data.session) { closeModal(); }
+        else setMsg(msg, '가입 확인 메일을 보냈어요. 메일의 링크를 누른 뒤 로그인해 주세요.', true);
+      } else {
+        const { error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        closeModal();
+      }
+    } catch (err) { setMsg(msg, korErr(err)); }
+    finally { $('authSubmit').disabled = false; }
+  });
+
+  $('contactForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('contactMsg');
+    if (!db) return setMsg(msg, '아직 데이터베이스가 연결되지 않았습니다. tomasg@naver.com으로 메일 주세요.');
+    const { error } = await db.from('inquiries').insert({
+      name: $('cName').value.trim(), email: $('cEmail').value.trim(), message: $('cBody').value.trim()
+    });
+    if (error) return setMsg(msg, '전송에 실패했습니다: ' + error.message);
+    e.target.reset();
+    setMsg(msg, '문의가 접수되었습니다. 빠르게 답변드릴게요!', true);
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  if (db) {
+    db.auth.onAuthStateChange((_event, session) => renderAuth(session ? session.user : null));
+  }
+</script>
+</body>
+</html>
